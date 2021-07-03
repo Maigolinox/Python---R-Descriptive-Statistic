@@ -1,0 +1,248 @@
+---
+title: "CLASE 110-DATOS ORDINALES"
+author: "VICTOR MIGUEL TERRON MACIAS"
+date: "14/6/2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# DATOS ORDINALES
+
+Recordad que la __diferencia__ entre un __dato ordinal__ y un __dato cualitativo__ es que el ordinal que vamos a trabajar aquí sigue describiendo una cualidad de un objeto o una cualidad de un individuo.
+Pero ahora el dato cualitativo presenta unas características que expresan datos ordinales es decir que  presentan un orden natural que permite ir acumulando observaciones es decir podremos contar para cada nivel cuántas observaciones hay por debajo de ese nivel ya no sólo podemos contar observaciones frecuencias absolutas las llamábamos de cada uno de los niveles sino frecuencias menores o iguales que las de un nivel dado.
+
+Un caso frecuente van a ser las escalas Flicker que se utilizan para conocer la opinión de un grupo de personas sobre un tema o un tema determinado por ejemplo si vamos a la Wikipedia y buscamos las escalas y qué vais a ver que la misma Wikipedia aparece pues las típicas encuestas que conoceis y que seguramente alguna vez os han llevado a cabo o son las encuestas de cinco puntos respecto a una afirmación cuando te gusta ir al cine estás totalmente desacuerdo en desacuerdo ni de acuerdo ni desacuerdo de acuerdo o totalmente de acuerdo.
+
+Normalmente las escalas de Ticker presentan unas respuestas de este estilo donde podréis ver que la respuesta es una categoría Manen sigue siendo una categoría como lo era anteriormente pero con la diferencia de que estas categorías ahora tienen cierto orden y que responder uno en la pregunta Te gusta ir al cine es estar menos en estar más en desacuerdo que responder cuatro que significa estar de acuerdo que te gusta ir al cine de acuerdo por tanto esa va a ser la diferencia grande que nos va a permitir diferenciar entre un dato ordinal y un dato cualitativo veréis que en erre pues es una pequeña variante de lo que ya conocéis y que habiendo trabajado tanto el tema de las cualidades o los datos cualitativos no va a costar demasiado emigrar ahora a los datos ordinales.
+
+# FRECUENCAIS ACUMULADAS EN DATOS ORDINALES
+
+Los datos ordinales son parecidos a los cualitativos, en el sentido de que son cualidades de los individuos u objetos.
+
+La diferencia existente entre los datos cualitativos y los ordinales reside en las características que expresan. En el caso de los ordinales, éstas tienen un orden natural que permite acumular observaciones.
+
+Escalas likert son 1. Totalmente de acuerdo 2. En desacuerdo 3. Ni deacuerdo ni en desacuerdo 4. Desacuerdo 5. Totalmente en desacuerdo
+
+
+## FRECUENCIA ACUMULADA EN DATOS ORDINALES
+
+__Ejemplo1__
+
+Suponed que tenemos una muestra de 15 estudiantes de los cuales sabemos su nota en examen de estadística. Clasificamos todos estos resultados en suspenso, aprobado, notable y excelente, las notas han sido las siguientes:
+
+S,A,N,Ex,S,S,Ex,Ex,N,A,A,A,A,A,N,S
+
+Para calculo de frecuencia absoluta se usa la funcion __table()__
+
+Para crear un array de datos ordinales se utiliza la funcion __ordered(c())__
+
+
+```{r or,comment=NA}
+notas=ordered(c("S","A","N","Ex","S","S","Ex","Ex","N","A","A","A","A","N","S"),levels=c("S","A","N","Ex"))
+table(notas)
+```
+
+La frecuencia relativa acumulada para datos ordinales es calculada como el numero de observaciones entre el total del tamaño de la muestra.
+
+
+
+__EJEMPLO 2__ En un estudio a un grupo de clientes de un restaurante se les hizo una pregunta: ¿Estás contenco con el trato ofrecido por los trabajadores del establecimiento? Las posibles respuestas forman una escala ordinal con 1<2<3<4<5. Supongamos que se recogieron las siguientes respuestas de 50 tecnicos.
+
+```{r ejjjj2,comment=NA}
+set.seed(2018)
+clientes=sample(1:5,50,replace = TRUE)
+clientes
+set.seed(NULL)
+```
+
+Posteriormente tenemos 5 niveles por lo que $k$=5, y 50 observaciones por lo que $n$=50, que forman una variable ordinal a la que hemos nombreado clientes.
+
+Hemmos calculado sus frecuencias (absoluta, relativa, acumulada y relativa acumulada) y las hemos representado en la siguiente tabla.
+
+# FUNCION CUMSUM
+
+Se utiliza para calcumar las frecuencias acumuladas, si se aplica sobre una tabla de contingencia tendrá el mismo efecto y por tanto se puede utilizar para calcular la tabla de las frecuecais abasolutas o frecuencais relativas de un vector.
+
+
+```{r,comment=NA}
+fAbs=table(notas)#FRECUENCIAS ABSOLUTAS
+cumsum(fAbs)#FRECUENCAIS ABSOLUTAS ACUMULADAS
+cumsum(prop.table(fAbs))#FRECUENCIAS RELATIVAS ACUMULADAS
+barplot(fAbs,main="Diagrama de barras de las frecuencias absolutas")
+barplot(cumsum(fAbs),main="Diagrama de barras de frecuencais relativas acumuladas")
+```
+
+Recuerda que la prop table de las frecuecnais relativas te da la tabla de frecuencias relativas
+
+Pudimos haber calculado las frecuencais relativas acumuladas de la forma
+
+```{r,comment=NA}
+cumsum(table(notas))/length(notas)
+cumsum(table(notas)/length(notas))
+```
+
+### EJEMPLO 3
+
+Se ha evaluado el tamaño de los cuellos de 100 jirafas. Los niveles que se han utilizado se los considera ordenados de la siguiente forma:
+Muy corto<Corto<Normal<Largo<Muy largo
+
+```{r,comment=NA}
+longitud=sample(c("Muy corto","Corto","Normal","Largo","Muy largo"),50,replace = TRUE)
+```
+
+## FRECUENCIA ABSOLUTA DE EJEMPLO 3
+
+```{r,comment=NA}
+frAbs=table(longitud)
+frAbs
+```
+## FRECUENCIA RELATIVA EJEMPLO 3
+
+```{r,comment=NA}
+frRel=prop.table(frAbs)
+frRel
+```
+
+## FRECUENCIAS ABSOLUTAS ACUMULADAS
+
+```{r,comment=NA}
+frAcum=cumsum(frAbs)
+frAcum
+```
+
+## FRECUENCIA RELATIVA ACUMULADA
+
+```{r,comment=NA}
+frRAcum=cumsum(frRel)
+frRAcum
+```
+
+## DIAGRAMA DE BARRAS DE FRECUENCIAS RELATIVAS ACUMULADAS
+
+```{r,comment=NA}
+barplot(frRAcum,main = "Diagrama de frecuencias relativas acumuladas")
+```
+
+# ANÁLISIS DE DATOS ORDINALES POR FACTOR
+
+Para calcular frecuencias acumuladas en una tabla multidimensional, hay que aplicar a la tabla la funciopn cumsum mediante la funcion apply que ya explicabamos para matrices. En este caso concreto, al sintaxis de la instrucción sería
+
+apply(tabla,MARGIN=...,FUN=cumsum)
+
+donde el valor de MARGIN ha de ser el de la dimension en la que queremos acumular las frecuencias 1 si queremso hacerlo por filas 2 por si queremos hacerlo por columans etc.
+
+## EJEMPLO 4
+
+Supongamos que en el ejemplo anterior, el de las jirafas, estas provienen de 4 zonas diferentes, a,B,C,D de manera que las 30 primeras son de la zona A, las siguientes 25 son de la zona B, las 35 siguientes de la zona C y las ultimas 10 de la zona D. Nos interesa estudiar la distribución de las longitusdes según la zona.
+
+Vamos a organizasr todos estos datos en un dataframe llamado jirafas. Para q    ue nos sea más fácil visualizar la información es conveniente que las filas de las tablas de frecuencais correspondan a las zonas. Por lo tanto, al definir el dataframe, entraremos como primera variable la de la muestra de las zonas. Así conseguiremos que éstas aparezcan en las filas al aplicarle la función table.
+
+```{r,comment=NA}
+zonas=rep(c("A","B","C","D"),c(30,25,35,10))
+jirafas=data.frame(zonas,longitud)
+jirafas$zonas=as.factor(jirafas$zonas)
+str(jirafas)
+head(jirafas)
+```
+
+### PARA CALCULAR LA TABLA DE FRECUENCACIS ABSOLUTAS ACUMULADAS
+
+Para calcular la tabla de frecuencias absolutas acumuladas de las longitudes por zonas y como las zonas definen las filas de la tabla anterior, debemos utilizar la funcion apply con MARGIN=1.
+
+```{r,comment=NA}
+apply(table(jirafas), MARGIN=1,FUN=cumsum)
+t(apply(table(jirafas), MARGIN=1,FUN=cumsum))
+```
+
+Para calcular la tabla de frecuencias relativas acumuladas de las longitudes del cuello po zonas. Para conseguirlo, y en una unica instruccion, primero calculamos la tabla de frecuencias relativas por filas, a continuación, con las funciones apply y cumsum las acumulamos y finalmente transponemos el resultado.
+
+```{r,comment=NA}
+t(apply(prop.table(table(jirafas),margin=1),MARGIN=1, FUN=cumsum))
+```
+
+### DIAGRAMA DE BARRAS
+
+```{r,comment=NA}
+Diagrama=apply(prop.table(table(jirafas),margin = 1),MARGIN=1, FUN=cumsum)
+barplot(Diagrama,beside=TRUE,legend=TRUE,main="Diagrama de barras de frecuencias relativas acumuladas de longitudes por zonas",args.legend=list(x="topleft",cex=0.5),col = c("Red","Green","Blue","Brown","Pink"))
+```
+
+## EJEMPLO 5
+
+Consideremos el dataframe __datacrab__ y arreglemos los datos
+
+```{r}
+cangrejos=read.table("r-basic-master/data/datacrab.txt",header = TRUE)
+cangrejos=cangrejos[,-1]#Omitimos la primera columna
+str(cangrejos)
+```
+
+La variable width contiene la acnhura de cada cangrejo. Para comprobar si es una variable ordinal podemos definir lo siguiente:
+```{r,comment=NA}
+table(cangrejos$width)
+```
+
+Como podemos ver no es una variable ordinal, apra convertirla en variable ordinal utilizando escalas hacemos lo siguiente:
+
+La manera msa sencilla de dividirlo por segmentos es utilizar la funcion cut, que estudiaremos en detalle en lecciones posteriores. Por ahora, basta con saber que la instrucción dividirá el vector numérico crabs$width en intervalos de extremos los puntos específicados en el argumento breaks. El parámetro right=FALSE sirve para indicar que los puntos de corte pertenecen al intervalo de su derecha e Inf indica infinito. RIGHT=FALSE dice que es intervalo abierto es decir, si tenemos el intervalo 24-25 el 25 no esta incluido dentro del intervalo.
+
+```{r,comment=NA}
+intervalos=cut(cangrejos$width,breaks = c(21,25,29,33,Inf),right = FALSE,labels = c("21-25","25-29","29-33","33-..."))
+```
+
+Para ordenar dichos rangos hacemos lo siguiente:
+
+```{r,comment=NA}
+cangrejos$width.rank=ordered(intervalos)
+str(cangrejos)
+```
+
+Si nos interesa estudiar la distribución de las anchuras de los cangrejos segun el numero de colores. Por lo tanto, vamos a calcular las tablas bidimensionales de frecuencais relativas y relativas acumuladas de los intervalos de las anchuras en cada nivel de color y las representaremos por medio de diagramas de barras.
+
+La tabla de frecuencias de los pares se puede obtener aplicando table al dataframe formado por la primera y ultima columnas.
+
+```{r,comment=NA}
+Tabla=table(cangrejos[,c(1,6)])
+Tabla
+```
+
+Para obtener la tabla de frecuencias relativas se usa la siguiente instruccion:
+
+```{r,comment=NA}
+frecRel=round(prop.table(Tabla,margin = 1),3)
+frecRel
+```
+
+Para obtener la tabla de frecuencias relativas acumulada se utiliza la siguiente instrucción:
+
+```{r,comment=NA}
+frecRelAcum=round(apply(prop.table(Tabla,margin=1), MARGIN=1, FUN=cumsum),3)
+t(frecRelAcum)
+```
+
+Graficando en diagramas de barras tenemos lo siguiente:
+
+```{r,comment=NA}
+azul=c("cyan","cyan4","cyan1","cyan3")
+barplot(t(frecRel),
+        beside = TRUE,
+        legend=TRUE,
+        ylim=c(0,1),
+        col=azul,
+        main="Diagrama de barras de frecuencais relativas",
+        args.legend=list(x="topright",cex=0.55))
+```
+
+Graficando el grafico de frecuencias relativas acumuladas.
+
+```{r,comment=NA}
+barplot(frecRelAcum,
+        beside = TRUE,
+        legend=TRUE,
+        col=azul,
+        main="Diagrama de barras de frecuencias acumuladas",
+        args.legend=list(x="topleft",cex=0.55)
+        )
+```
+
