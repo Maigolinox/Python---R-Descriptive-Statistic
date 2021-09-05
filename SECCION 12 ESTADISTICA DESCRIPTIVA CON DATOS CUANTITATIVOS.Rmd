@@ -7,4 +7,622 @@ output: html_document
 
 # TEMA 8- ESTADÍSTICA DESCRIPTIVA CON DATOS CUANTITATIVOS
 
+Los datos cuantitativos son los que expresan cantidades quie se representan mediante numeros. Estos se suelen clasificar en continuos y discretos.
+
+Los datos continuos son los que si existiese la posibilidad de medirlos con preciciosn infinita, en principio podrían tomar todos los valores de un intervalo de la recta real. A modo de ejem,plo, el peso, la altura, el tiempo.
+
+Por su parte los datos discretos son los que pueden tomar solo un conjunto contable de valores. El número de colores de un gato, el numero de individuos que conforman una población son ejemplo de eeste tipo de datos
+
+En la praxis todos los datos son discretos puesto que la precisión infinita no existe. Sin embargo, es necesario de vez en cuando superponer los datos de tipo continuo para así poder utilizar técnicas específicas en su análisis.
+
+Cuando se estudien variables cuantitativas podemos usar las frecuencias absolutas, relativas, acumuladas y relativas acumuladas, esto se debe a que  podemos ordenar los datos cuantitativos en el orden natural de los números reales.
+
+Los datos cuantitativos admiten dos tiupos de datos de tratamiento según trabajemos con los raw data o bien los agrupemos en clases o intervalos.
+
+
+# FRECUENCIAS DE DATOS CUANTITATIVOS
+
+El tratamiendo con este tipo de datos considera unicamente los qwue han sido observados.
+
+Ejemplo:
+
+```{r,comment=NA}
+edad=c(15,18,25,40,30,29,56,40,13,27,42,23,11,26,25,32,30,40,33,29)
+```
+
+Recordemos que solo nos interesan las frecuecnais de las edades observadas. Es decir solamente nos interesan: Es decir solo me interesa calcular las frecuencias observadas, no me interesan 12  ni 14 por ejemplo que ni siquiera aprecen.
+
+```{r,comment=NA}
+table(edad)
+```
+
+## CALCULANDO LAS FRECUENCIAS QUE YA CONOCEMOS
+
+
+### FRECUENCIA RELATIVA
+
+```{r,comment=NA}
+round(prop.table(table(edad)),3)
+```
+
+# FRECUENCIA ABSOLUTA ACUMULADA
+
+```{r,comment=NA}
+cumsum(table(edad))
+```
+
+## FRECUENCIA RELATIVA ACUMULADA
+
+```{r}
+round(cumsum(prop.table(table(edad))),3)
+```
+
+## FRECUENCIA DE DATOS CUANTITATIVOS
+
+
+* La frecuencia absoluta de $X_{i}$ es el numero $n_{i}$ de elementos que son iguales a $X_{i}$
+* La frecuencia relativa de $X_{i}$ es $f_{i}=\dfrac{n_{i}}{n}$
+* La frecuencia absoluta acumulada de $X_{i}$ es $N_{i}=\sum_{j=1}^{i}n_{j}$
+* La frecuencia relativa acumulada de $X_{i}$ es $F_{i}=\dfrac{N_{i}}{n}$
+
+
+### EJEMPLO
+
+Lanzamos 25 veces un dado de 6 caras y anotamos las puntuaciones obtenidas en cada tirada.
+
+En este caso, $n=25$ y los distintivos valores observados son $X_{1}=1$,$X_{2}=2$,$X_{3}=3$,$X_{4}=4$,$X_{5}=5$,$X_{6}=6$
+
+Nos interesa calcular ahora las frecuencias de este experimento. Además, las organizaremos en un dataframe para observarlas de forma más clara y sencilla en una tabla.
+
+```{r,comment=NA}
+set.seed(162017)
+dados=sample(1:6,25,replace = TRUE)
+dados
+set.seed(NULL)
+```
+
+## FRECUENCIAS ABSOLUTAS DE DATOS CUANTITATIVOS
+
+```{r,comment=NA}
+table(dados)
+```
+
+## FRECUENCIAS RELATIVAS DE LOS DATOS
+
+```{r,comment=NA}
+round(prop.table(table(dados)),3)
+```
+
+## FRECUENCIAS ABSOLUTAS ACUMULADAS DE DATOS CUANTITATIVOS
+
+```{r,comment=NA}
+cumsum(table(dados))
+```
+
+## FRECUENCIAS RELATIVAS ACUMULADAS DE DATOS CUANTITATIVOS
+
+```{r,comment=NA}
+cumsum(prop.table(table(dados)))
+```
+
+## PARA QUE SEA COMODO VISUALIZAR
+
+```{r,comment=NA}
+dados_DF=data.frame(cara_Dado=1:6,
+                    frec_Absoluta=as.vector(table(dados)),
+                    frec_Relativa=as.vector(round(prop.table(table(dados)),2)),
+                    frec_Abs_Acum=as.vector(cumsum(table(dados))),
+                    frec_Rel_Acum=as.vector(round(cumsum(prop.table(table(dados))),2))
+                    )
+dados_DF
+```
+
+Para colocar un vector como columna de un data frame se coloca como vector.
+
+> NOTA: PARA ENTRAR AA UNA TABLA UNIDIMENSIONAL COMO UNA VARIABLE EN UN DATAFRAME ES CONVENIENTE TRANSOFRMARLA EN VECTOR AS.VECTOR SINO CADA TABLE Y PROPTABLE AÑADIRÍAN UNA COLUMNA EXTRA CON LOS NOMBRES DE LOS NIVELES.
+
+
+## MEDIDAS DE TENDENCIA CENTRAL
+
+Las medidas de tendencia central son las que dan un valor representativo a todas las observaciones. Algunas de las más importantes son:
+
+* La media aritmética o valor medio $\bar{x}=\dfrac{\sum_{i=1}^{n}X_{i}}{n}=\dfrac{\sum_{j=1}^{k}n_{j}X_{j}}{n}=\sum_{j}^{k} f_{j=1}X_{j}$
+* La mediana, que representa el valor central en la lista ordenada de observaciones
+* La moda es el valor (o valores) de máxima frecuencia (absoluta o relativa, el resultado será el mismo)
+
+### LA MEDIANA
+
+La definición formal de la mediana es la siguiente. Denotando por
+
+$x_{(1)}\leq x_{(2)}\leq ... \leq x_{(n)}$
+
+los datos de la variable cuantitativa ordenados de menor a mayor, la mediana es:
+
+* Si $n$ par, la medio de los datos centrales $$\dfrac{x_{\dfrac{n}{2}}+x_{\dfrac{n}{2}+1}}{2}$$
+* Si $n$ impar, el dato central $x_{\dfrac{n+1}{2}}$
+
+```{r,comment=NA}
+sort(edad)
+table(edad)
+```
+
+## MEDIDAS DE TENDENCIA CENTRAL EN R
+
+Vamos a calcular la media aritmética, mediana y moda de los dos ejemplos anteriores con instrucciones de R.
+
+### MEDIA ARITMÉTICA
+
+```{r,comment=NA}
+mean(edad)
+mean(dados)
+median(edad)
+```
+
+### MEDIANA
+
+```{r,comment=NA}
+median(dados)
+```
+
+
+### MODA
+
+```{r,comment=NA}
+as.numeric(names(which(table(edad)==max(table(edad)))))
+as.numeric(names(which(table(dados)==max(table(dados)))))
+```
+
+Cuando trabajamos con datos cuantitativos, es conveniente que el resultado lo demos como un número. De ahí que hayamos aplicado la funcion as.numeric.
+
+
+## LAS DIFERENTES MEDIADS EN MATEMÁTICAS
+
+En matemáticas la media es una medida de centralización
+
+```{r creamosVecto,comment=NA}
+x=c(32,45,67,43,28,17,48,95)
+n=length(x)
+```
+
+
+## MEDIA ARITMÉTICA
+
+Promedio estandar que a menudo se considera promedio
+
+Vamos a calcular las medias del vector `r x`` que está formado por `r n` observaciones.
+
+$$\bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i$$
+```{r,comment=NA}
+mean(x)
+```
+
+
+## MEDIA ARITMÉTICA PONDERADA
+
+Es util cuando al primer valor/categoria se le quiere dar más peso que al resto.
+
+$$\frac{\sum_{i=1}^{n}w_i\cdot x_i}{\sum_{i=1}^{n}w_i}$$
+
+```{r,comment=NA}
+pesos=c(1,2,2,3,3,2,2,1)
+sum(pesos*x)/sum(pesos)
+```
+
+## MEDIA GEOMÉTRICA
+
+Es muy util cuando el conjunto de numeros que son interpretados en orden de su producto, no de su suma por ejemplo las velocidades de su crecimiento.
+
+Por ejemplo la media geométrica de la serie de numeros $1,2,3,4,5,9$ (seis valores) es $(1\cdot 2\cdot 3\cdot 4\cdot 5\cdot 9)^\frac{1}{6}=1699493400^\dfrac{1}{6}\approx 4$
+
+Fórmula general:
+
+$$\bar{x}=\left( \prod_{i=1}^n x_i\right)^{1/n}$$
+
+```{r}
+prod(x)^(1/n)
+prod(x^(1/n))
+```
+
+## MEDIA ARMÓNICA
+
+Útil en conjuntos de números que se definen en relación con alguna unidad, por ejemplo la velocidad (distancia por unidad de tiempo).
+
+$$\bar{x}=\frac{n}{\sum_{i=1}^{n}\cdot\dfrac{1}{x_i}}$$
+
+```{r,comment=NA}
+medArmonica=n/sum(1/x)
+medArmonica
+```
+
+
+# MEDIDAS DE POSICIÓN
+
+Se calculan en variables cuantitativas, se estiman en que valores son los que dividen la población en determinadas proporciones, se les conoce como cuantiles.
+
+
+Dicho de otro modo, si tenemos un conjunto de observaciones $x_1,x_2,...,x_n$ y se ordenan de menor a mayor entonces $Q_p$ será el número más pequeño que deja a su izquierda. Ahora es más claro ver que la mediana vendría a ser $Q_{0.5}$, el cuantul de orden 0.5.
+
+
+## EJEMPLO
+
+Consideramos un experimento en el que lanzamos 50 veces un dado de 4 caras y obtenemos lo siguientes resultados:
+
+```{r,comment=NA}
+set.seed(260798)
+dado=sample(1:4,50,replace = TRUE)
+set.seed(NULL)
+length(dado)
+```
+
+```{r,comment=NA}
+dado=sort(dado)#se ordenan de menor a mayor
+dado
+```
+
+
+Construyendo la tabla de frecuencias:
+
+```{r,comment=NA}
+dataFrameDado=data.frame(Puntuacion=1:4,
+                         FrecAbsolut=as.vector(table(dado)),
+                         FrecAbsAcum=as.vector(cumsum(table(dado))),
+                         FrecRelativa=as.vector(round(prop.table(table(dado)),2)),
+                         FrecRelAcum=as.vector(cumsum(round(prop.table(table(dado)),2)))
+                         )
+dataFrameDado
+```
+
+Si nos piden el cuantil $Q_{0.3}$ sabemos que este es el primer elemento de la lista cuya frecuencias relativa acumulada es mayor o igual 0.3. Este corresponde con la puntuación 1.
+
+Otra forma de encontrarlo es utiulizar la definición, si queremos el cuantil 0.3 podemos definir el total de observaciones y sacar su 30% de esa manera siguiento la definicion del cuantil se coloca:
+
+```{r,comment=NA}
+dado[15]
+```
+
+
+Para calcular directamente un cuantil de orden p de una variable cualitatativa x con R, se utiliza la instrucción quantile(x,p), al cual dispone de 9 métodos diferentes que se especifican con el parámtro type, mismo que pro defecto es type=7.
+
+```{r,comment=NA}
+set.seed(0)
+dados2=sample(1:6,15,replace = TRUE)
+dados2
+set.seed(NULL)
+quantile(dados2,0.25)#primer cuartil o percentil 25
+quantile(dados2,0.8)
+```
+
+
+# MEDIDAS DE DISPERSIÓN
+
+Las medidas de dispersión evalúan lo dispersos que están los datos, algunas de las mas importantes sonm:
+
+* El rango o recorrido, que es la diferencia entre el maximo y el mínimo de las observaciones.
+* El rango intercualítico, que es la diferencia entre el tercer y primer cuartil. $Q_{0.75}-Q_{0.25}$
+* La varianza, a la que denotamos por $s^2$, es la media aritmética de las diferencias al cuadrado entre los datos $x_i$ y la media aritmética de las observaciones, $\bar{x}$.  $$s^2=\dfrac{\sum_{j=1}^n (x_j-\bar{x})^2}{n}  = \dfrac{\sum_{j=1}^n (X_j-\bar{x})^2}{n}=\sum_{j=1}^{k}f_i (X_j-\bar{x})^2$$
+* La desviación típica (poblacional) es la ra+iz cuadrada positiva de la varianza, $s=\sqrt{s^2}$
+* La varianza muestral (poblacional) es la correción de la varianza. La denotamos por $\tilde{s}^2$ y se corresponde con: $$\tilde{s}^2=\dfrac{n}{n-1} \cdot s^2 =\dfrac{\sum_{j=1}^{n} (x_i -\bar{x})^2}{n-1}$$
+* La desviación típica muestral, que es la raíz cuadrada positiva de la varianza muestral, $\tilde{s}=\sqrt{\tilde{s}^2}$
+
+
+## PROPIEDADES DE LA VARIANZA
+
+* $s^2 \geq 0$. Esto se debe a que, por definición es una suma de cuadrados de numeros reales
+* $s^2=0 \Longrightarrow x_j-\bar{x}=0\ \  \forall \ j=1,...,n$. En consecuencia, si $s^2=0$, entonces todos los datos son iguales
+* $s^2=\dfrac{\sum_{j=1}^{n}x_j^2}{n}-\bar{x}^2$. Es decir, la varianza es la media de los cuadrados de los datos menos el cuadrado de la media aritmética de estos.
+
+
+La diferencia entre varianza poblacional y varianza muestral, viene dada por la interrelación entre la estadística descriptiva y la inferencial.
+
+Por un lado es normal medir como varian los datos cuantitativos mediante su varianza definida como la media aritmética de las disntacias al cuadrado de los datos a su valor medio. No obstante, por otro lado, el conjunto de nuestras observaciones, por lo normal, será una muestra de una población mucho mayor y nos interesará estimar entre otras muchas cosas su variabilidad.
+
+La varianza de una muestra suele dar valores más pequeños que la varianza de la población mientras que la varianza muestral tiende a dar valores alrededor de la varianza de la población.
+
+Para el caso de una muestra grande no es notable. Dividir $n$ entre $n-1$ en el caso de $n$ ser grande no significa una gran diferencia y aún menos si tenemos en cuenta que lo que tratamos es de estimar la varianza de la población, no de calcularla de forma exacta.
+
+En cambio, si la muestra es relativamente pequeña (digamos $n<30$), entonces la vcarianza muestral de la muestra aproxima significativamente mejor la varianza de la población que la varianza.
+
+La diferencia entre desviación típica y desviación típica muestral es análoga.
+
+Con R calcularemos la varianzaz y la desviación típica muestrales. Con lo cual si queremos calcular las que no son muestrales, tendremos que multiplicarlas por $\dfrac{n-1}{n}$ donde n es el tamaño de la muestra.
+
+Nótese que tanto la varianza como la desviación típica dan una información equivalente. Entonces, es comprensible preguntarse por qué se definen ambas medidas si con una basta. Pues bien, las unidades de la varianza (metros, litros, años, etc.) ya sea muestral o no están al cuadrado, mientras que las de la desviacióin típica al cuadrado no.
+
+
+# FORMULA ALTERNATIVA DE LA VARIANZA
+
+$$s^2=\dfrac{\sum{x_i}^2}{n}-\bar{x}^2$$
+
+
+# MEDIDAS DE DISPERSIÓN CON R
+
+**Valores mínimo y máximo** $range(x)$
+
+**Rango**   $diff(range(x))$
+
+**Rango intercualítico**  $IQR(x,type=\ ...)$
+
+**Varianza muestral** $var(x)$
+
+**Desviación típica muestral**  $sd(x)$
+
+**Varianza**  $var(x)*(lenght(x)-1)/length(x)$
+
+**Desviación típica**  $sd(x)*(length(x)-1)/length(x)$
+
+
+## EJEMPLO
+
+```{r,comment=NA}
+dados2
+
+diff(range(dados2))
+IQR(dados2)#significa que la diferencia entre el tercer y primer cuartirl hay 3 puntos de diferencia
+var(dados2)
+sd(dados2)#desviación tipica muestral
+n=length(dados2)
+var(dados2)*(n-1)/n#varianza verdadera
+sd(dados2)*sqrt((n-1)/n)#desviación tipica muestral
+```
+
+# FUNCIONES UTILES APLICABLES A VECTORES NUMÉRICOS
+
+## FUNCION SUMMARY
+
+La función summary aplicada a un vector numérico o a una variable cuantitativa nos devuelve un resumen estadístico con los valores mínimo y máximo del vector, sus tres cuartiles y su media.
+
+Al aplicar esta funcion a uun dataframe, esta se aplica a todas sus variables de forma simultanea. De este modo, podemos observar rápidamente si hay diferencias notables entre sus variables numéricas.
+
+```{r,comment=NA}
+cangrejos=read.table(file ="../Python---R-Descriptive-Statistic/r-basic-master/data/datacrab.txt",header = TRUE)
+cangrejos=cangrejos[-1]#eliminamos la primera columna
+summary(cangrejos)
+```
+
+Por ejemplo si nos preguntaramos ¿Los cangrejos de 3 colores son más grandes que los de 5 colores? podemos hacer lo siguiente:
+
+```{r,comment=NA}
+summary(subset(cangrejos,color==3,c("weight","width")))
+summary(subset(cangrejos,color==5,c("weight","width")))
+```
+
+## FUNCION BY()
+
+La función by() se utiliza para aplicar una determinada función a algunas columnas de un dataframe segmentandolos según los niveles de un factor.
+
+La sintaxis de esta función es by(columnas, factor,FUN=funcion)
+
+Con lo cual haciendo uso de las función by específicando un FUN=summary, podremos calcular el resumen estadístico anteriormente comentado a subpoblaciones definidas por los niveles de un factor.
+
+
+### EJEMPLO
+
+Para este ejemplo haremos uso del famoso dataset de irirs.
+
+Si nos interesase calcular de forma rápida y sencillas las longitudes de sépalos y pétalos en función de la espeecia, necesitariamos hacer uso de la instrucción siguiente.
+
+```{r,comment=NA}
+by(iris,iris$Species,FUN=summary)
+```
+
+
+# FUNCION aggregate()
+
+Tanto la funcion by como la función aggregate son equivalentes. No obstante, los resultados se muestran de forma diferente en función de la que utilicemos. En el casod el ejemplo anterior convenía más utilizar la función by.
+
+```{r,comment=NA}
+aggregate(cbind(Sepal.Length,Petal.Length)~Species,data=iris,FUN=summary)
+```
+
+
+# FUNCION NA
+
+La mayoría de las funciones vistas a lo largo de este tema no funcionan bien con valores NA.
+
+Para no tenerlos en cuenta a la hora de aplicar estas funciones, hay que específicar el parámetro **na.rm=TRUE** en el argumento de la función.
+
+```{r,comment=NA}
+x=c(1,2,3,4,5,NA)
+sum(x)
+sum(x,na.rm = TRUE)
+mean(x)
+mean(x,na.rm = TRUE)
+var(x)
+var(x,na.rm = TRUE)
+sd(x)
+sd(x,na.rm = TRUE)
+
+dadosNA=c(dados2,NA)
+dadosNA
+mean(dadosNA)
+mean(dadosNA,na.rm=TRUE)
+```
+
+# DIAGRAMA DE CAJA Y BIGOTES
+
+## DIAGRAMS DE CAJA
+
+Son gráficos que resumen algunos datos estadísticos de la variable cuantitativa
+
+![DIAGRAMA DE CAJA BIGOTE](https://i.ibb.co/w7xH9PD/1.png)
+
+El conocido diagrama de caja o box plotes un tipo de gráfico que básicamente, remarca 5 valores estadísticos:
+
+* La mediana representada por la línea gruesa divide la caja
+* El primer y tercer cuartil, que sn los lados inferior y superior, respectivamente. De este modo, la altura de la caja es el rango intercualítico
+* Los extremos, los valores $b_{inf},b_{sup}$, son los bigotes (whiskers) del gráfico. Si m y M son em mínimo y máximo respectivamente de la variable cuantitativa, entonces los extremos se calculan del siguiente modo:
+
+$$b_{inf}=max \{m,Q_{0.25}-1.5(Q_{0.75}-Q_{0.25}) \}$$
+$$b_{inf}=min \{M,Q_{0.75}+1.5(Q_{0.75}-Q_{0.25}) \}$$
+
+* Valores atípicos o outliers, que son los que están más allá de los bigotes. Se marcan como puntos aislados.
+
+
+Por su definición, concluimos que los bigotes marcan el mínimo y máximo de la variable cuantitativa, a no se que haya datos muy alejados de la caja intercualítica.
+
+En tal caso, el bigote inferior marca el valor 1.5 veces el rango intercualítico por debajo de $Q_{0.25}$, mientras que el superior marca el valor 1.5 veces el rango intercualítico por encima de $Q_{0.75}$
+
+```{r,comment=NA}
+boxplot(dados2,main="Un diagrama de caja")
+boxplot(dado,dados2)
+```
+
+Podemos dibujar un diagrama de caja y bigote de todo un dataframe completo
+
+```{r,comment=NA}
+boxplot(iris)
+body=read.csv("Bodyfat.csv",header = TRUE)
+boxplot(body)
+boxplot(iris[,1:4])
+```
+
+## CONFIGURACIÓN DE LOS DIAGRMAS DE BIGOTE Y CADERA
+
+```{r ej8s,comment=NA}
+body=read.table("r-basic-master/data/bodyfat.txt",header = TRUE)
+boxplot(body)
+boxplot(body[,7:9],names=c("Pecho","Abdomen","Cadera"))
+
+```
+
+Agrupar varios diagramas de caja en un solo gráfico tiene por objetivo podere compararlos visualmente, lo cual cuando las variables tienen significados parecidos o cuando comparamos una misma variable de poblaciones distintas.
+
+
+La sintaxis de la instrucción para dibujar un único gráfico los diagramas de cajha de variable numérica de un dataframe es boxplot(var.numerica~factor,data=dataframe)
+
+
+```{r ,comment=NA}
+boxplot(circumference~Tree,data=Orange,ylab="Circinferencia del tronco (mm)",main = "Boxplot de los naranjos en función del tipo de árbol")
+
+boxplot(iris$Sepal.Length~iris$Species,data=iris)
+```
+
+# PARÁMETROS PARA LOS BOXPLOT
+
+Tdosos los parámetros de la función plot que tengan sentido pueden ser utilizados en los argumentos de la funcion boxplot(). Aparte la función boxplot() dispone de parámetros específicos, de los cuales mencionaremos:
+
+* notch igualado a __TRUE__ añade una muestra en la mediana de la caja. Si se da el caso en que las muescas de dos diagramas no se solapan, entonces con alto grado de confianza, concluimos que las medianas de las poblaciones correspondientes son diferentes.
+
+```{r e10,comment=NA}
+boxplot(Sepal.Width~Species,data = iris,ylab="Anchura del sétalo (cm)",main="Boxplot de iris",notch=TRUE,col=c("cyan","cyan2","cyan4"))
+#PARA AGREGAR LA MEDIA UTILIZAMOS EL COMANDO POINTS
+medias=aggregate(Sepal.Width~Species, data=iris,FUN=mean)
+points(medias,col="red",pch=15)
+```
+
+Un boxplot genera una estructura interna muy rica y se puede estudiar si utilizamos los objetos con la funcion str.
+
+Dicha función aplicada a un boxplot nos hace obtener lo siguiente:
+
+* str(boxplot(circumference~Tree,data=Orange)), algunos de sus componentes son:
+* __stats__ nos debvuelve los valores $b_{inf},Q_{0.25},Q_{0.75},b_{sup}$
+* __out__ nos retorna los valores atípicos. En caso de haber diversos diagramas en un plot, la componente __group__ nos indica a que diagramas pertenecen estos ouliers.
+
+
+
+```{r e11,comment=NA}
+str(boxplot(Sepal.Width~Species,data = iris,ylab="Anchura del sétalo (cm)",main="Boxplot de iris",notch=TRUE,col=c("cyan","cyan2","cyan4")))
+```
+
+# ANÁLISIS DE SPRAY INSECTICIDA
+
+
+Paso 1. Cargamos los datos del dataset de R
+
+```{r analisisInsecticida1,comment=NA}
+dataEjercicio=InsectSprays
+```
+
+Paso 2. Obtenemos una descripción de los datos
+
+```{r analisisInsecticida2,comment=NA}
+head(dataEjercicio)
+str(dataEjercicio)
+```
+
+Paso 3. Obtenemos un resumen estadístico de cada variable utilizada en el dataset
++
+```{r analisisInsecticida3,comment=NA}
+by(dataEjercicio$count,dataEjercicio$spray,FUN=summary)
+```
+
+Paso 4. Calculamos la desviación estandar para confirmar lo que nos da de resumen de las variables anteriores
+
+```{r analisisInsecticida4,comment=NA}
+aggregate(count~spray,data=dataEjercicio,FUN=sd)
+```
+
+La desviación tipica indica que los botes A matan 4.719399 bichos más arriba abajo de la media, mientras que los que matan 1.975225 son más específicos aunque no maten tantos bichos.
+
+```{r analisisInsecticida5,comment=NA}
+boxplot(count~spray,data=dataEjercicio,col="lightgreen",xlab="Tipo de spray",ylab="Insectos muertos")
+```
+
+En base al anterior diagrama de caja podemos conocer que el spray A,B y F son más efectivos en generales pero no son específicos.
+
+# TAREA DE LAS MEJORES NOTAS, MATEMÁTICOS VS INGENIEROS INDUSTRIALES
+
+
+1. Calcula la media, la mediana y la moda redondeada a dos cifras decimales de las notas numéricas de los exámenes tanto de forma conjunta como por estudio universitario. ¿En qué grupo observamos la nota más alta? ¿Qué grupo está por encima de la media de estudiantes?
+2. ¿En qué grupo observamos más variación de notas? Justifica tu respuesta
+3. ¿Hay mucha diferencia entre el grupo que has respondido en el ejercicio 1 y en el ejercicio 2? Intenta dar una explicación objetiva del suceso
+4. Dibuja en un único gráfico los cuatro diagramas de caja, uno para cada grupo. Añade así mismo la nota media, pon nombre, título y color al gráfico para documentar el gráfico correctamente.
+5. ¿Observas algunos valores atípicos en el boxplot anterior? ¿A qué grupo pertence?
+6. Indica a partir del boxplot anterior en qué grupo observamos más variedad de notas.
+7. En base a todo lo anterior, ¿puedes afirmar de forma estadística que el examen de carrera ha ido mejor en algún estudio que en los demás?
+
+
+Parte 1.
+
+```{r tarea,comment=NA}
+dataTarea=read.table("r-basic-master/data/grades.txt",header = TRUE)
+head(dataTarea)
+by(data = dataTarea$nota,dataTarea$estudio,FUN = summary,digits=2)
+funcionModa<-function(v){
+  uniqv<-unique(v)
+  uniqv[which.max(tabulate(match(v,uniqv)))]
+}
+funcionModa(dataTarea$nota)
+paste0(cat("\nNota media total: "), round(mean(dataTarea$nota), 2))
+```
+
+Parte 2.
+
+```{r p2ej3,comment=NA}
+sd_grupos=aggregate(nota~estudio,data = dataTarea,FUN=sd)
+sd_grupos
+```
+
+Parte 3.
+
+Como mencioné previamente, el hecho de que Industriales tenga el rango más alto, no quiere decir que sea el más variante, pues la desviación estándar es mayor en Matemáticas, eso quiere decir que en conjunto este grupo varía más en notas.
+
+
+Parte 4.
+
+```{r p4ej3,comment=NA}
+boxplott=boxplot(nota~estudio,data=dataTarea,col=c("cyan","green","orange","red2"),main="NOTAS POR CARRERA",xlab="Carrera",ylab="Nota")
+boxplott
+points(aggregate(nota~estudio,data=dataTarea,FUN=mean),pch=18)
+```
+
+Parte 5. 
+
+```{r}
+str(boxplott)
+```
+
+Parte 6.
+
+
+Indica a partir del boxplot anterior en qué grupo observamos más variedad de notas.
+
+Observamos mayor varianza en las notas en el grupo de Matemáticas, debido a que los bigotes son más largos que en cualquiera de los demás. El segundo grupo más variante sería Telemática.
+
+Parte 7. 
+
+
+En base a todo lo anterior, ¿puedes afirmar de forma estadística que el examen de carrera ha ido mejor en algún estudio que en los demás?
+
+Sí, se podría afirmar que para los estudiantes de informática, en general, examen fue mejor, ya que presentan la 2º nota media más alta, la nota mínima más alta (2) y además son los que presentan unas notas menos variables (bigotes más pequeños).
 

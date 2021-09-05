@@ -1,0 +1,33 @@
+---
+title: "SECCION 14. ANÁLISIS DE DATOS CUANTITATIVOS AGRUPADOS"
+author: "VICTOR MIGUEL TERRON MACIAS"
+date: "23/7/2021"
+output: html_document
+---
+
+# TEMA 9 - DATOS CUANTITATIVOS AGRUPADOS
+
+Calificamos excelente a notas por encima del 9. Por ejemplo lo siguiente:
+
+```{r,comment=NA}
+pesos=c(55.2,54.0,55.2, 53.7,60.2,53.2,54.6,55.1,51.2,53.2,54.8,52.3,56.9,57.0,55.0,53.5,50.9,55.1,53.6,61.2,59.5,50.3,52.7,60.0)
+```
+
+Hay 3 situaciones donde conviene agrupar los datos cuantitativos en intervalos, tambien llamados clases:
+
+* Cuando los datos son continuos, su redonde ya define un agrupamiento debido a la inexistencia de precisión infinita
+* Cuando los datos son discretos, pero con un número considerablemente grande de posibles valores
+* Cuando tenemos muchisimos datos y estamos interesados en estudiar las frecuencias de sus valores
+
+
+## EL PROCESO DE AGRUPACION DE DATOS
+
+Hay cuatro pasos:
+
+1. Decidir el numero de intervalos que vamos autilizar
+2. Decidir la amplitud de estos intervalos
+3. Acumular los extremos de los intervalos
+4. Calcular el valor representativo de cada intervalo, su marca de clase
+
+No hay una forma de agrupar datos mejor que otra. Eso si cada uno de los diferentes agrupamientos para un conjunto de datos podría sacar a la luz características diferentes del conjunto.
+
